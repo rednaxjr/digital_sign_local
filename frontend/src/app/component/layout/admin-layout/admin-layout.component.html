@@ -1,0 +1,59 @@
+<div class="flex h-screen bg-gray-100 overflow-hidden">
+
+  <!-- Sidebar -->
+  <aside
+    class="flex flex-col bg-blue-900 text-white transition-all duration-300 flex-shrink-0"
+    [class.w-260]="sidebarOpen"
+    [class.w-16]="!sidebarOpen">
+
+    <!-- Logo -->
+    <div class="flex items-center gap-3 px-4 py-5 border-b border-blue-700 h-16">
+      <mat-icon class="text-yellow-400 flex-shrink-0">access_time</mat-icon>
+      <span *ngIf="sidebarOpen" class="font-bold text-base whitespace-nowrap">DTR System</span>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 py-4 overflow-y-auto">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        routerLinkActive="bg-blue-700"
+        class="flex items-center gap-3 px-4 py-3 mx-2 rounded-lg hover:bg-blue-800 transition-colors cursor-pointer">
+        <mat-icon class="flex-shrink-0 text-blue-200">{{ item.icon }}</mat-icon>
+        <span *ngIf="sidebarOpen" class="text-sm whitespace-nowrap">{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <!-- User info & logout -->
+    <div class="border-t border-blue-700 p-4">
+      <div *ngIf="sidebarOpen" class="mb-3">
+        <p class="text-xs text-blue-300">Logged in as</p>
+        <p class="text-sm font-semibold truncate">{{ currentUser?.name }}</p>
+        <p class="text-xs text-blue-300 capitalize">{{ currentUser?.role?.replace('_', ' ') }}</p>
+      </div>
+      <button
+        (click)="logout()"
+        class="flex items-center gap-2 text-blue-300 hover:text-white transition-colors w-full">
+        <mat-icon class="text-sm flex-shrink-0">logout</mat-icon>
+        <span *ngIf="sidebarOpen" class="text-sm">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+
+    <!-- Topbar -->
+    <header class="flex items-center gap-4 px-6 h-16 bg-white shadow-sm flex-shrink-0">
+      <button (click)="toggleSidebar()" class="text-gray-500 hover:text-gray-700">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h1 class="text-gray-700 font-semibold text-lg flex-1">Admin Panel</h1>
+    </header>
+
+    <!-- Page content -->
+    <main class="flex-1 overflow-y-auto p-6">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
