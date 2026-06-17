@@ -51,12 +51,12 @@ export class IndexComponent implements OnInit {
   ngOnInit(): void {
     this.getAllFiles();
   }
-  async getAllFiles() { 
+  async getAllFiles() {
     this.documents_list = await this.file_service.get_files2();
     this.documents_list_duplicate = this.documents_list;
 
     for (let i = 0; i < this.documents_list.length; i++) {
-      this.documents_list[i].status = 0;  
+      this.documents_list[i].status = 0;
     }
   }
 

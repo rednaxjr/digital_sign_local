@@ -6,18 +6,17 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.prod';
 import { ConfigService } from '../config/config.service';
 
-interface PdfFile {
-  name: string;
-  path: string;
-  status?: number;
-  signatureCount?: number;
-}
 
 declare global {
   interface Window {
     electronAPI: {
-      listPdfs: (folderPath: string) => Promise<any[]>;
+      listPdfs: (folderPath: string, signatureDir: string) => Promise<any[]>;
       readPdf: (filePath: string) => Promise<string>;
+      deletePdf: (filePath: string) => Promise<void>;
+      saveSignature: (signatureDir: string, stem: string, base64Data: string) => Promise<void>;
+      deleteSignature: (signatureDir: string, stem: string) => Promise<void>;
+      onConfigUpdated: (callback: (newConfig: any) => void) => void;
+      config: any;
     };
   }
 }
@@ -42,9 +41,12 @@ export class FileService {
   //   return this.httpClient.post(this.url + "/get_files", this.headers)
   // }
 
-  async get_files2(): Promise<PdfFile[]> {
+
+  async get_files2(): Promise<any[]> {
     const folder = this.configService.uploadDir;
-    return window.electronAPI.listPdfs(folder);
+    const signatureDir = this.configService.signatureDir;
+    console.log('PDF folder from config:', folder);
+    return window.electronAPI.listPdfs(folder, signatureDir);
   }
 
   async readPdfAsBase64(filePath: string): Promise<string> {
@@ -66,8 +68,18 @@ export class FileService {
     return this.httpClient.get<any>(this.url + "/getAllFiles");
   }
 
-  remove_signature(data: any) {
-    return this.httpClient.post(this.url + "/delete_file", data, this.headers)
+  remove_signature(data: any): Promise<void> {
+    return window.electronAPI.deletePdf(data.path);
+  }
+
+  async saveSignature(stem: string, base64Data: string): Promise<void> {
+    const signatureDir = this.configService.signatureDir;
+    return window.electronAPI.saveSignature(signatureDir, stem, base64Data);
+  }
+
+  async deleteSignature(stem: string): Promise<void> {
+    const signatureDir = this.configService.signatureDir;
+    return window.electronAPI.deleteSignature(signatureDir, stem);
   }
   delete_folders(data: any) {
     console.log(data)

@@ -11,23 +11,25 @@ export class ConfigService {
   constructor(private http: HttpClient) { }
   async loadConfig(): Promise<void> {
     try {
-      const args = (window as any).process?.argv || [];
-      const configArg = args.find((arg: string) => arg.startsWith('--config='));
+      const electronConfig = (window as any).electronAPI?.config;
 
-      if (configArg) {
-        this.config = JSON.parse(configArg.replace('--config=', ''));
+      if (electronConfig && Object.keys(electronConfig).length > 0) {
+        this.config = electronConfig;
       } else {
         this.config = await firstValueFrom(
           this.http.get('assets/config.json')
         );
       }
-      console.log("this is the config in config.service: " + this.config)
+      console.log('[Config] Loaded:', this.config);
     } catch (error) {
       console.error('Config load failed:', error);
-
-      this.config = { apiUrl: 'https://stech.wheba-services.net/digital-signature/api' };
-      console.log("this is the config in config.service when its else: " + this.config)
+      this.config = {};
     }
+
+    (window as any).electronAPI?.onConfigUpdated?.((newConfig: any) => {
+      this.config = newConfig;
+      console.log('[Config] Updated live:', newConfig);
+    });
   }
 
   get apiUrl(): string {
@@ -35,6 +37,10 @@ export class ConfigService {
   }
 
   get uploadDir(): string {
-    return this.config['upload_dir'];
+    return this.config['file_dir'];
+  }
+
+  get signatureDir(): string {
+    return this.config['signature_dir'];
   }
 }

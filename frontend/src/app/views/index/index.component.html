@@ -1,19 +1,13 @@
-<div class="flex flex-col h-auto min-h-0   overflow-hidden relative">
-  <div class="flex-1 min-h-0">
-    <!-- <app-banner [data]="banner"> </app-banner> -->
-    <div class="py-4">
-      <p class=" font-medium text-5xl">
-        Document List
-      </p>
-    </div>
-    <div
-      class="bg-white rounded-lg shadow-sm   py-4 px-6 w-full h-full">
-      <app-document-table
-        class="mat-table"
-        [data]="documents_list"
-        (signatureSaved)="handleSignatureSaved($event)"
-        (deleteConfirmed)="deleted()">
-      </app-document-table>
-    </div> 
+<div class="flex flex-col h-full min-h-0 overflow-hidden relative">
+  <div class="py-4 shrink-0">
+    <p class="font-medium text-5xl">Document List</p>
+  </div>
+  <div class="flex-1 min-h-0 bg-white rounded-lg shadow-sm py-4 px-6 overflow-hidden">
+    <app-document-table
+      class="h-full"
+      [data]="documents_list"
+      (signatureSaved)="handleSignatureSaved($event)"
+      (deleteConfirmed)="deleted()">
+    </app-document-table>
   </div>
 </div> 

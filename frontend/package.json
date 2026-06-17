@@ -8,7 +8,8 @@
     "forceCodeSigning": false,
     "files": [
       "dist/frontend/**/*",
-      "electron/main.js"
+      "electron/main.js",
+      "electron/preload.js"
     ],
     "extraResources": [
       {
@@ -18,7 +19,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "assets/icon.ico",
+      "icon": "src/assets/icon.ico",
       "signAndEditExecutable": false
     },
     "nsis": {
@@ -37,7 +38,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron": "ng build --base-href ./ && electron .",
-    "package": "electron-builder"
+    "package": "ng build --base-href ./ && electron-builder"
   },
   "private": true,
   "dependencies": {

@@ -80,21 +80,19 @@ export class FileDetailsComponent implements AfterViewInit, OnDestroy {
     this.isEmpty = true;
   }
 
-  save() {
+  async save() {
     if (this.signaturePad.isEmpty()) return;
-    const blob = this.dataURLtoBlob(this.signaturePad.toDataURL('image/png'));
-    const formData = new FormData();
-    const sign_data = {
-      data: this.data,
-    }
-    formData.append('files', blob, 'signature.png');
-    formData.append('sign_data', JSON.stringify(sign_data));
-    this.file_service.uploadFile(formData).subscribe((res: any) => {
-    
-        this.dialog.close({
-          action: 'save'
-        }); 
-    });
+    const dataUrl = this.signaturePad.toDataURL('image/png');
+    const base64 = dataUrl.split(',')[1];
+    const stem = this.data.pdf.name.replace(/\.pdf$/i, '');
+    await this.file_service.saveSignature(stem, base64);
+    this.dialog.close({ action: 'save' });
+  }
+
+  async deleteSignature() {
+    const stem = this.data.pdf.name.replace(/\.pdf$/i, '');
+    await this.file_service.deleteSignature(stem);
+    this.dialog.close({ action: 'save' });
   }
   private dataURLtoBlob(dataUrl: string): Blob {
     const [header, data] = dataUrl.split(',');

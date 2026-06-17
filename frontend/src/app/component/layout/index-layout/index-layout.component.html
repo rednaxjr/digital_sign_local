@@ -48,9 +48,9 @@
         </mat-sidenav> -->
 
         <mat-sidenav-content class="!relative flex flex-col h-full bg-gray-100">
-            <mat-toolbar class="fixed-header   drop-shadow-md  ">
+            <!-- <mat-toolbar class="fixed-header   drop-shadow-md  ">
 
-                <!-- <div class="flex w-full justify-between  items-center ">
+                <div class="flex w-full justify-between  items-center ">
                     <button
                         type="button"
                         aria-label="Toggle sidenav"
@@ -61,11 +61,11 @@
                     </button>
                     <span class="example-spacer"></span>
                     
-                </div> -->
+                </div>
            
-            </mat-toolbar>
+            </mat-toolbar> -->
             <!-- Main Content Area -->
-            <div class="flex-1 overflow-auto px-4 pb-5 relative">
+            <div class="flex-1 overflow-hidden px-4 pb-5 relative h-full flex flex-col">
                 <router-outlet></router-outlet>
             </div>
         </mat-sidenav-content>

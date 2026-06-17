@@ -80,31 +80,25 @@ export class DocumentTableComponent {
 
   }
   onDelete(data: any) {
-    console.log(data)
     this.confirmation_service.confirm({
       title: 'Delete Confirmation',
-      message: 'Are you sure you want to delete the signature?',
+      message: 'Are you sure you want to delete this file?',
       confirmText: 'Delete',
       cancelText: 'Cancel',
       type: 'danger',
       isCancel: true,
-    }).subscribe((confirmed: any) => {
+    }).subscribe(async (confirmed: any) => {
       if (confirmed) {
-        this.file_service.remove_signature(data).subscribe((res: any) => {
-
-          this.confirmation_service.confirm({
-            title: 'Delete product',
-            message: 'Product has been removed.',
-            confirmText: 'Close',
-
-          })
-          this.onDeleteConfirmed();
-        })
-      } else {
-        console.log('canceled');
+        const stem = data.name.replace(/\.pdf$/i, '');
+        await this.file_service.deleteSignature(stem);
+        this.confirmation_service.confirm({
+          title: 'Signature Deleted',
+          message: 'The signature has been removed.',
+          confirmText: 'Close',
+        });
+        this.onDeleteConfirmed();
       }
     });
-
   }
 
   async onDeleteConfirmed() { 
